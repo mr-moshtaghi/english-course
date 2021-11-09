@@ -144,6 +144,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = "account.CustomUser"
 
 CODE_LENGTH = int(os.getenv("_CODE_LENGTH", '5'))
 CODE_EXPIRE_TIME = int(os.getenv('_CODE_EXPIRE_TIME', '5'))

@@ -1,11 +1,38 @@
 import datetime
 import random
 
+from django.contrib.auth.models import AbstractUser
+from django.core import validators
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from kavenegar import *
 
 from core.models import BaseModel
 from english_course import settings
+
+
+@deconstructible
+class NumericUsernameValidator(validators.RegexValidator):
+    regex = r"^[0][9][0-9]{9}$"
+    message = _(
+        'Enter a valid username. This value must be 11 numbers'
+    )
+    flags = 0
+
+
+class CustomUser(AbstractUser):
+    cellphone_validator = NumericUsernameValidator()
+    cellphone = models.CharField(
+        _('username'),
+        max_length=11,
+        unique=True,
+        help_text=_('Required. 11 digits for cellphone.'),
+        validators=[cellphone_validator],
+        error_messages={
+            'unique': _("A user with that cellphone already exists."),
+        },
+    )
 
 
 class VerificationCode(BaseModel):
@@ -22,7 +49,7 @@ class VerificationCode(BaseModel):
             cellphone=cellphone,
             code=code,
             expire_time=datetime.datetime.now() + datetime.timedelta(
-                        minutes=settings.CODE_EXPIRE_TIME),
+                minutes=settings.CODE_EXPIRE_TIME),
             last_send=datetime.datetime.now()
         )
         verification_code.save()
