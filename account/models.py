@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from kavenegar import *
 
+from account.usermanager import UserManager
 from core.models import BaseModel
 from english_course import settings
 
@@ -22,6 +23,8 @@ class NumericUsernameValidator(validators.RegexValidator):
 
 
 class CustomUser(AbstractUser):
+    username = None
+    objects = UserManager()
     cellphone_validator = NumericUsernameValidator()
     cellphone = models.CharField(
         _('username'),
@@ -33,6 +36,8 @@ class CustomUser(AbstractUser):
             'unique': _("A user with that cellphone already exists."),
         },
     )
+    USERNAME_FIELD = 'cellphone'
+    REQUIRED_FIELDS = []
 
 
 class VerificationCode(BaseModel):
