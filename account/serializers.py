@@ -1,9 +1,11 @@
+import datetime
+
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from account.models import CustomUser
+from account.models import CustomUser, VerificationCode
 
 
 class TokenObtainPairWithoutPasswordSerializer(TokenObtainPairSerializer):
@@ -17,6 +19,15 @@ class TokenObtainPairWithoutPasswordSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         cellphone = attrs.get('cellphone')
+        code = attrs.get('code')
+        login_code = VerificationCode.objects.filter(
+            expire_time__gt=datetime.datetime.now(),
+            cellphone=cellphone
+        ).last()
+        if not login_code or login_code.code != code:
+            raise serializers.ValidationError(
+                'The requested login details is not found or expired')
+
         user, _ = CustomUser.objects.get_or_create(
             cellphone=cellphone,
             defaults={
