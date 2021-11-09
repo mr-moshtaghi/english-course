@@ -15,7 +15,6 @@ class TokenObtainPairWithoutPasswordSerializer(TokenObtainPairSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['password'].required = False
-        self.fields['username'].required = False
 
     def validate(self, attrs):
         cellphone = attrs.get('cellphone')
