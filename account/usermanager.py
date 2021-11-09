@@ -3,6 +3,16 @@ from django.contrib.auth.base_user import BaseUserManager
 
 class UserManager(BaseUserManager):
 
+    def _create_user(self, cellphone, password, **extra_fields):
+        """
+        Create and save a user with the given username, email, and password.
+        """
+        self.cellphone = cellphone
+        user = self.model(cellphone=cellphone, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
     def create_user(self, cellphone, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
