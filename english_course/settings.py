@@ -144,3 +144,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CODE_LENGTH = int(os.getenv("_CODE_LENGTH", '5'))
+CODE_EXPIRE_TIME = int(os.getenv('_CODE_EXPIRE_TIME', '5'))
+KAVENEGAR_API_KEY = os.getenv('_KAVENEGAR_API_KEY', '74786562356549357A74576246764A6F7547484775646573414237436E666D7A504F6B3D')
+RESEND_WAITE_TIME = int(os.getenv('_RESEND_WAITE_TIME', '121'))
