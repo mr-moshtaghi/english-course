@@ -43,4 +43,4 @@ class TokenObtainPairWithoutPasswordSerializer(TokenObtainPairSerializer):
 
 
 class GetCodeSerializer(serializers.Serializer):
-    username = serializers.RegexField(regex=r"^[0][9][0-9]{9}$")
+    cellphone = serializers.RegexField(regex=r"^[0][9][0-9]{9}$")

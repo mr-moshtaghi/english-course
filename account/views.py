@@ -15,7 +15,7 @@ class GetCodeView(APIView):
     def post(self, request):
         serializer = GetCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        cellphone = serializer.validated_data['username']
+        cellphone = serializer.validated_data['cellphone']
         login_code = VerificationCode.objects.filter(
             last_send__gte=(datetime.datetime.now() - datetime.timedelta(
                 seconds=settings.RESEND_WAITE_TIME)),
