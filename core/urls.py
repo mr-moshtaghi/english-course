@@ -11,7 +11,7 @@ urlpatterns = [
         path('viewed/', views.CourseUserView.as_view(
             {'post': 'create'}
         )),
-        path('<int:pk>/', include([
+        path('<int:course_pk>/', include([
             path('', views.ListCourseView.as_view({
                 'get': 'retrieve'
             })),
@@ -20,4 +20,12 @@ urlpatterns = [
             ))
         ])),
     ]))),
+    path('videos/', include(([
+        path('', views.ListVideoView.as_view({
+            'get': 'list'
+        })),
+        path('viewed/', views.VideoUserView.as_view(
+            {'post': 'create'}
+        )),
+    ])))
 ]
