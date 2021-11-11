@@ -51,6 +51,9 @@ class CourseUser(BaseModel):
     user = models.ForeignKey('account.CustomUser', related_name='course_user', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='course_user', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ['user', 'course']
+
     def __str__(self):
         return f"{self.user}={self.course}"
 
@@ -59,6 +62,9 @@ class VideoUser(BaseModel):
     user = models.ForeignKey('account.CustomUser', related_name='video_user', on_delete=models.CASCADE)
     video = models.ForeignKey(Video, related_name='video_user', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ['user', 'video']
+
     def __str__(self):
         return f"{self.user}={self.video}"
 
@@ -66,6 +72,9 @@ class VideoUser(BaseModel):
 class WordUser(BaseModel):
     user = models.ForeignKey('account.CustomUser', related_name='word_user', on_delete=models.CASCADE)
     word = models.ForeignKey(Word, related_name='word_user', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['user', 'word']
 
     def __str__(self):
         return f"{self.user}={self.word}"

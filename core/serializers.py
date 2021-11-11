@@ -22,9 +22,15 @@ class CourseUserSerializer(serializers.ModelSerializer):
         exclude = ('created_at', 'updated_at', 'user')
 
     def create(self, validated_data):
-        validated_data['user'] = self.context.get('request').user
-        return super().create(validated_data)
+        user = self.context.get('request').user
+        course_id = validated_data['course_id']
 
+        if CourseUser.objects.filter(user=user, course_id=course_id).exists():
+            raise serializers.ValidationError(
+                'This user has already viewed this course')
+
+        validated_data['user'] = user
+        return super().create(validated_data)
 
 
 class CourseVideoSerializer(serializers.ModelSerializer):

@@ -39,11 +39,9 @@ class CourseUserView(viewsets.ViewSet):
         }
 
         serializer = self.serializer_class(data=request.data, context=context)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'ok'})
-        else:
-            return Response(serializer.errors)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': 'ok'})
 
 
 class ListCourseVideoView(viewsets.ViewSet):
