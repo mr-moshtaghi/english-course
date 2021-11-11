@@ -2,6 +2,7 @@ from django.db import models
 
 
 # Create your models here.
+from core import const
 
 
 class BaseModel(models.Model):
@@ -72,6 +73,9 @@ class VideoUser(BaseModel):
 class WordUser(BaseModel):
     user = models.ForeignKey('account.CustomUser', related_name='word_user', on_delete=models.CASCADE)
     word = models.ForeignKey(Word, related_name='word_user', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20,
+                              choices=const.WORD_USER_STATUS_CHOICES,
+                              default=const.WORD_USER_STATUS_NOT_LEARNED)
 
     class Meta:
         unique_together = ['user', 'word']

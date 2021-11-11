@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, Video, CourseUser, VideoUser
+from .models import Course, Video, CourseUser, VideoUser, Word, WordUser
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class CourseUserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class CourseVideoSerializer(serializers.ModelSerializer):
+class VideoSerializer(serializers.ModelSerializer):
     is_viewed = serializers.SerializerMethodField()
 
     class Meta:
@@ -44,8 +44,26 @@ class CourseVideoSerializer(serializers.ModelSerializer):
         return obj.is_viewed(self.context.get('request').user)
 
 
+class WordUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WordUser
+        fields = ('status',)
+
+
+class WordSerializer(serializers.ModelSerializer):
+    is_viewed = serializers.SerializerMethodField()
+    word_user = serializers.ListSerializer(child=WordUserSerializer())
+
+    class Meta:
+        model = Word
+        fields = ('id', 'english_word', 'translate', 'word_user', 'is_viewed')
+
+    def get_is_viewed(self, obj):
+        return obj.is_viewed(self.context.get('request').user)
+
+
 class VideoUserSerializer(serializers.ModelSerializer):
-    video = CourseVideoSerializer(read_only=True)
+    video = VideoSerializer(read_only=True)
     video_id = serializers.IntegerField(write_only=True)
 
     class Meta:
