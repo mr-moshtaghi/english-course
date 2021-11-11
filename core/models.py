@@ -26,7 +26,7 @@ class Course(BaseModel):
 class Video(BaseModel):
     title = models.CharField(max_length=255)
     url = models.URLField()
-    video = models.ForeignKey(Course, related_name='video', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='video', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

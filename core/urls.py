@@ -4,14 +4,20 @@ from core import views
 
 app_name = 'core'
 urlpatterns = [
-    # path('courses/',include ListCourse.as_view({'get': 'list'}), name='list_course'),
-
     path('courses/', include(([
-        path('', views.ListCourse.as_view({
+        path('', views.ListCourseView.as_view({
             'get': 'list',
         })),
-        path('<int:pk>', views.ListCourse.as_view({
-            'get': 'retrieve'
-        }))
+        path('viewed/', views.CourseUserView.as_view(
+            {'post': 'create'}
+        )),
+        path('<int:pk>/', include([
+            path('', views.ListCourseView.as_view({
+                'get': 'retrieve'
+            })),
+            path('videos/', views.ListCourseVideoView.as_view(
+                {'get': 'list'}
+            ))
+        ])),
     ]))),
 ]

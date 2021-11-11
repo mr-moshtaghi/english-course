@@ -3,12 +3,14 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSetMixin
 
-from core.models import Course
-from core.serializers import CourseSerializer
+from core.models import Course, Video, CourseUser
+from core.serializers import CourseSerializer, CourseVideoSerializer, CourseUserSerializer
 
 
-class ListCourse(viewsets.ViewSet):
+class ListCourseView(viewsets.ViewSet):
     def list(self, request):
         context = {
             'request': request
@@ -24,4 +26,32 @@ class ListCourse(viewsets.ViewSet):
         queryset = Course.objects.all()
         course = get_object_or_404(queryset, pk=pk)
         serializer = CourseSerializer(course, context=context)
+        return Response(serializer.data)
+
+
+class CourseUserView(viewsets.ViewSet):
+    queryset = CourseUser.objects.all()
+    serializer_class = CourseUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        context = {
+            'request': request
+        }
+
+        serializer = self.serializer_class(data=request.data, context=context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'ok'})
+        else:
+            return Response(serializer.errors)
+
+
+class ListCourseVideoView(viewsets.ViewSet):
+    def list(self, request, *args, **kwargs):
+        context = {
+            'request': request
+        }
+        course_pk = kwargs.get('pk')
+        videos = Video.objects.filter(course_id=course_pk)
+        serializer = CourseVideoSerializer(videos, many=True, context=context)
         return Response(serializer.data)
