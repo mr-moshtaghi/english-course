@@ -1,14 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSetMixin
 
-from core.models import Course, Video, CourseUser, VideoUser, Word
+from core import const
+from core.models import Course, Video, CourseUser, VideoUser, Word, WordUser
 from core.serializers import CourseSerializer, VideoSerializer, CourseUserSerializer, VideoUserSerializer, \
-    WordSerializer
+    WordSerializer, WordUserSerializer
 
 
 class CourseView(viewsets.ViewSet):
@@ -30,7 +31,7 @@ class CourseView(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class ListVideoView(viewsets.ViewSet):
+class VideoView(viewsets.ViewSet):
     def list(self, request):
         context = {
             'request': request
@@ -44,8 +45,27 @@ class ListVideoView(viewsets.ViewSet):
             'request': request
         }
         queryset = Video.objects.all()
-        course = get_object_or_404(queryset, pk=pk)
-        serializer = VideoSerializer(course, context=context)
+        video = get_object_or_404(queryset, pk=pk)
+        serializer = VideoSerializer(video, context=context)
+        return Response(serializer.data)
+
+
+class WordView(viewsets.ViewSet):
+    def list(self, request):
+        context = {
+            'request': request
+        }
+        queryset = Word.objects.all()
+        serializer = WordSerializer(queryset, many=True, context=context)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        context = {
+            'request': request
+        }
+        queryset = Word.objects.all()
+        word = get_object_or_404(queryset, pk=pk)
+        serializer = WordSerializer(word, context=context)
         return Response(serializer.data)
 
 
@@ -77,6 +97,38 @@ class VideoUserView(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'message': 'ok'})
+
+
+class WordUserView(viewsets.ViewSet):
+    queryset = WordUser.objects.all()
+    serializer_class = WordUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        context = {
+            'request': request
+        }
+        serializer = self.serializer_class(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': 'ok'})
+
+    def learned(self, request, pk, *args, **kwargs):
+        user = request.user
+        word_user = self.queryset.filter(pk=pk).first()
+        if not word_user:
+            return Response(
+                {'Bad Request': "Your request is not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if not word_user.user == user:
+            return Response(
+                {'Bad Request': "The user does not have such a word-user"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        word_user.status = const.WORD_USER_STATUS_LEARNED
+        word_user.save()
+        return Response(status=status.HTTP_200_OK)
 
 
 class CourseVideoView(viewsets.ViewSet):

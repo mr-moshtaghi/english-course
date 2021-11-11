@@ -44,7 +44,7 @@ class VideoSerializer(serializers.ModelSerializer):
         return obj.is_viewed(self.context.get('request').user)
 
 
-class WordUserSerializer(serializers.ModelSerializer):
+class WordUserStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordUser
         fields = ('status',)
@@ -52,7 +52,7 @@ class WordUserSerializer(serializers.ModelSerializer):
 
 class WordSerializer(serializers.ModelSerializer):
     is_viewed = serializers.SerializerMethodField()
-    word_user = serializers.ListSerializer(child=WordUserSerializer())
+    word_user = serializers.ListSerializer(child=WordUserStatusSerializer())
 
     class Meta:
         model = Word
@@ -75,6 +75,26 @@ class VideoUserSerializer(serializers.ModelSerializer):
         video_id = validated_data['video_id']
 
         if VideoUser.objects.filter(user=user, video_id=video_id).exists():
+            raise serializers.ValidationError(
+                'This user has already viewed this video')
+
+        validated_data['user'] = user
+        return super().create(validated_data)
+
+
+class WordUserSerializer(serializers.ModelSerializer):
+    word = WordSerializer(read_only=True)
+    word_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = WordUser
+        exclude = ('created_at', 'updated_at', 'user')
+
+    def create(self, validated_data):
+        user = self.context.get('request').user
+        word_id = validated_data['word_id']
+
+        if WordUser.objects.filter(user=user, word_id=word_id).exists():
             raise serializers.ValidationError(
                 'This user has already viewed this video')
 

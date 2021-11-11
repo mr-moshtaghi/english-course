@@ -27,11 +27,30 @@ urlpatterns = [
         'post': 'create'
     })),
     path('videos/', include(([
-        path('', views.ListVideoView.as_view({
+        path('', views.VideoView.as_view({
             'get': 'list'
+        })),
+        path('<int:pk>/', views.VideoView.as_view({
+            'get': 'retrieve'
         })),
         path('viewed/', views.VideoUserView.as_view(
             {'post': 'create'}
         )),
+    ]))),
+    path('words/', include(([
+        path('', views.WordView.as_view({
+            'get': 'list'
+        })),
+        path('<int:pk>/', views.WordView.as_view({
+            'get': 'retrieve'
+        })),
+        path('viewed/', include([
+            path('', views.WordUserView.as_view({
+                'post': 'create'
+            })),
+            path('<int:pk>/learned/', views.WordUserView.as_view({
+                'patch': 'learned'
+            }))
+        ])),
     ])))
 ]
