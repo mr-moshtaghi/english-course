@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-h)f1+dj04uff9kabgx72m0i^nrsmmvh1c3f4owz(fs!wwif#*7
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    
-    
+
     'account.apps.AccountConfig',
     'core.apps.CoreConfig'
 ]
@@ -61,7 +58,7 @@ ROOT_URLCONF = 'english_course.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,7 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'english_course.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -91,7 +87,6 @@ DATABASES = {
     }
 }
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -100,7 +95,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -120,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -134,11 +127,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -148,5 +150,6 @@ AUTH_USER_MODEL = "account.CustomUser"
 
 CODE_LENGTH = int(os.getenv("_CODE_LENGTH", '5'))
 CODE_EXPIRE_TIME = int(os.getenv('_CODE_EXPIRE_TIME', '5'))
-KAVENEGAR_API_KEY = os.getenv('_KAVENEGAR_API_KEY', '74786562356549357A74576246764A6F7547484775646573414237436E666D7A504F6B3D')
+KAVENEGAR_API_KEY = os.getenv('_KAVENEGAR_API_KEY',
+                              '74786562356549357A74576246764A6F7547484775646573414237436E666D7A504F6B3D')
 RESEND_WAITE_TIME = int(os.getenv('_RESEND_WAITE_TIME', '121'))
