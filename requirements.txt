@@ -11,6 +11,7 @@ kavenegar==1.1.2
 Markdown==3.3.4
 mysqlclient==2.0.3
 PyJWT==2.3.0
+python-dotenv==0.19.2
 pytz==2021.3
 requests==2.26.0
 six==1.16.0
