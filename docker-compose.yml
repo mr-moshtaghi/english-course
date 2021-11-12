@@ -1,0 +1,29 @@
+version: '2'
+services:
+ db:
+    restart: always
+    image: percona
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=english_course
+      - MYSQL_USER=englishcourse
+      - MYSQL_PASSWORD=englishcourse
+    volumes:
+      - ../storage/english-course/mysql:/var/lib/mysql
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+
+ englishcourse:
+    build: .
+    ports:
+      - 9091:9000
+    links:
+      - db
+    environment:
+      - _DB_NAME=english_course
+      - _DB_USER=englishcourse
+      - _DB_PASS=englishcourse
+      - _DB_HOST=db
+      - _DB_PORT=3306
+    volumes:
+      - ../storage/english-course/media:/var/www/media
+
