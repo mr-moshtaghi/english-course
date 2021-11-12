@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'english_course.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('_DB_NAME', 'test'),
+        'NAME': os.getenv('_DB_NAME', 'english_course'),
         'USER': os.getenv('_DB_USER', 'root'),
         'PASSWORD': os.getenv('_DB_PASS', 'root'),
         'HOST': os.getenv('_DB_HOST', '127.0.0.1'),
