@@ -33,4 +33,4 @@ RUN chmod +x entrypoint.sh
 EXPOSE 80
 
 #RUN cd /var/www/ && python3 manage.py collectstatics
-CMD ["/var/www/entrypoint.sh"]
+ENTRYPOINT ["/var/www/entrypoint.sh"]

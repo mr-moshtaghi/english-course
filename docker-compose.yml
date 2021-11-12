@@ -1,6 +1,6 @@
 version: '2'
 services:
- db:
+  db:
     restart: always
     image: percona
     environment:
@@ -9,10 +9,10 @@ services:
       - MYSQL_USER=englishcourse
       - MYSQL_PASSWORD=englishcourse
     volumes:
-      - ../storage/english-course/mysql:/var/lib/mysql
+      - mysql-course:/var/lib/mysql
     command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
 
- englishcourse:
+  englishcourse:
     build: .
     ports:
       - 9091:9000
@@ -25,5 +25,10 @@ services:
       - _DB_HOST=db
       - _DB_PORT=3306
     volumes:
-      - ../storage/english-course/media:/var/www/media
+      - ./media:/var/www/media
+      - ./static:/var/www/static
+      - ./assets:/var/www/assets
+    command: "run" 
 
+volumes:
+  mysql-course:
