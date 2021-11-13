@@ -173,3 +173,16 @@ class CourseVideoWordView(viewsets.ViewSet):
         word = get_object_or_404(queryset, pk=word_pk)
         serializer = WordSerializer(word, context=context)
         return Response(serializer.data)
+
+
+class NotLearnedWord(viewsets.ViewSet):
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        course_id = list(CourseUser.objects.filter(user=user).values_list('course_id', flat=True))
+        word_user = WordUser.objects.filter(
+            word__video__course_id__in=course_id,
+            user=user,
+            status=const.WORD_USER_STATUS_NOT_LEARNED
+        )
+        serializer = WordUserSerializer(word_user, many=True, context={'request': request})
+        return Response(serializer.data)

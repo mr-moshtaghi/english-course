@@ -52,5 +52,8 @@ urlpatterns = [
                 'patch': 'learned'
             }))
         ])),
-    ])))
+    ]))),
+    path('not-learned-word/', views.NotLearnedWord.as_view({
+        'get': 'list'
+    }))
 ]
