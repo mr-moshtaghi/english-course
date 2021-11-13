@@ -38,7 +38,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('id', 'title', 'video', 'url', 'is_viewed')
+        fields = ('id', 'title', 'video', 'is_viewed')
 
     def get_is_viewed(self, obj):
         return obj.is_viewed(self.context.get('request').user)

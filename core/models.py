@@ -27,7 +27,6 @@ class Course(BaseModel):
 class Video(BaseModel):
     title = models.CharField(max_length=255)
     video = models.FileField(upload_to='videos/', null=True, blank=True)
-    url = models.URLField()
     course = models.ForeignKey(Course, related_name='video', on_delete=models.CASCADE)
 
     def __str__(self):
