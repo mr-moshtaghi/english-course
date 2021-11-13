@@ -16,6 +16,7 @@ class BaseModel(models.Model):
 
 class Course(BaseModel):
     title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='images/course/', null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -27,6 +28,7 @@ class Course(BaseModel):
 class Video(BaseModel):
     title = models.CharField(max_length=255)
     video = models.FileField(upload_to='videos/', null=True, blank=True)
+    thumbnail = models.ImageField(upload_to='images/videos/', null=True, blank=True)
     course = models.ForeignKey(Course, related_name='video', on_delete=models.CASCADE)
 
     def __str__(self):

@@ -7,7 +7,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'title', 'is_viewed')
+        fields = ('id', 'title', 'image', 'is_viewed')
 
     def get_is_viewed(self, obj):
         return obj.is_viewed(self.context.get('request').user)
@@ -38,7 +38,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('id', 'title', 'video', 'is_viewed')
+        fields = ('id', 'title', 'video', 'thumbnail', 'is_viewed')
 
     def get_is_viewed(self, obj):
         return obj.is_viewed(self.context.get('request').user)
