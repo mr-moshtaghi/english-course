@@ -12,7 +12,8 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['english_word']
+    list_filter = ['type']
+    list_display = ['english_word', 'translate', 'type']
 
 
 class CourseUserAdmin(admin.ModelAdmin):
