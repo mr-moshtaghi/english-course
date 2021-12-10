@@ -55,8 +55,12 @@ class WordView(viewsets.ViewSet):
         context = {
             'request': request
         }
-        queryset = Word.objects.all()
-        serializer = WordSerializer(queryset, many=True, context=context)
+        if 'type' in request.query_params:
+            queryset = Word.objects.filter(type=request.query_params['type'])
+            serializer = WordSerializer(queryset, many=True, context=context)
+        else:
+            queryset = Word.objects.all()
+            serializer = WordSerializer(queryset, many=True, context=context)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
