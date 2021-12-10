@@ -41,7 +41,10 @@ class Video(BaseModel):
 class Word(BaseModel):
     english_word = models.CharField(max_length=255)
     translate = models.CharField(max_length=255)
-    video = models.ForeignKey(Video, related_name='words', on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, related_name='words', on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(max_length=20,
+                            choices=const.WORD_TYPES,
+                            default=const.WORD_TYPE_ONE)
 
     def __str__(self):
         return f"{self.english_word}={self.translate}"
