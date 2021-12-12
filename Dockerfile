@@ -21,8 +21,8 @@ RUN apt-get update && \
 RUN pip3 install uwsgi
 
 COPY requirements.txt /var/www
-RUN python -m pip install --upgrade pip
-RUN python -m pip install -r /var/www/requirements.txt
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install -r /var/www/requirements.txt
 
 # add (the rest of) our code
 COPY . /var/www
