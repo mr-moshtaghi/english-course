@@ -118,7 +118,7 @@ class WordUserView(viewsets.ViewSet):
 
     def learned(self, request, pk, *args, **kwargs):
         user = request.user
-        word_user = self.queryset.filter(pk=pk).first()
+        word_user = self.queryset.filter(word_id=pk, user=user).first()
         if not word_user:
             return Response(
                 {'Bad Request': "Your request is not found"},
