@@ -52,6 +52,8 @@ class Word(BaseModel):
     def is_viewed(self, user):
         return self.word_user.filter(user=user).exists()
 
+    def is_learned(self, user):
+        return self.word_user.filter(user=user, status='learned').exists()
 
 class CourseUser(BaseModel):
     user = models.ForeignKey('account.CustomUser', related_name='course_user', on_delete=models.CASCADE)

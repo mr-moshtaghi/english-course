@@ -58,15 +58,18 @@ class VideoUrlSerializer(serializers.ModelSerializer):
 
 class WordSerializer(serializers.ModelSerializer):
     is_viewed = serializers.SerializerMethodField()
-    word_user = serializers.ListSerializer(child=WordUserStatusSerializer())
+    is_learned = serializers.SerializerMethodField()
     video = VideoUrlSerializer()
 
     class Meta:
         model = Word
-        fields = ('id', 'english_word', 'translate', 'word_user', 'is_viewed', 'video')
+        fields = ('id', 'english_word', 'translate', 'is_learned', 'is_viewed', 'video')
 
     def get_is_viewed(self, obj):
         return obj.is_viewed(self.context.get('request').user)
+
+    def get_is_learned(self, obj):
+        return obj.is_learned(self.context.get('request').user)
 
 
 class VideoUserSerializer(serializers.ModelSerializer):
